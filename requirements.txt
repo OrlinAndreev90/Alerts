@@ -1,0 +1,8 @@
+azure-functions
+azure-identity
+azure-mgmt-datafactory
+azure-mgmt-resource
+pandas==1.0.3
+sqlalchemy
+pyodbc
+pretty-html-table

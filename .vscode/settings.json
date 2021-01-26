@@ -1,0 +1,16 @@
+{
+    "azureFunctions.deploySubpath": ".",
+    "azureFunctions.scmDoBuildDuringDeployment": true,
+    "azureFunctions.pythonVenv": ".venv",
+    "azureFunctions.projectLanguage": "Python",
+    "azureFunctions.projectRuntime": "~3",
+    "debug.internalConsoleOptions": "neverOpen",
+    "python.pythonPath": ".venv\\Scripts\\python.exe",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+     "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint_flask_sqlalchemy"
+       
+    ]
+}
