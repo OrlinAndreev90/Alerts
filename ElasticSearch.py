@@ -13,7 +13,7 @@ def QueryData(QueryDate,format,source_index):
     QueryDatestr = datetime.datetime.strftime(QueryDate,format=format)
     QueryDateLowerBoundstr = datetime.datetime.strftime(QueryDate - datetime.timedelta(hours=12),format=format)
     ## Connect to the Elastic Search db
-    es=  Elasticsearch(['https://readonlyuser:2r0i2r02gnfkjbw4fib23@cb5b186b27c5428882fc9787a686385e.europe-west1.gcp.cloud.es.io:9243'])
+    es=  Elasticsearch([     'https://user:secret@cb5b186b27c5428882fc9787a686385e.europe-west1.gcp.cloud.es.io:9243'])
 
     ## the data is kept in index : zz-carriers-api-prod-v1
     # _source_includes: A list of fields to extract and return
@@ -120,9 +120,9 @@ FinalData.to_csv('CombinedData_20200731_2019.csv',sep=';',index=False,header=Tru
 import sqlalchemy
 # Create Table
 
-usernameDest = 'OrlinAndreev'
-pwdDest = '0Li@m0ubFO'
-dsnDest = 'zz-live-wh-server.database.windows.net/zz-live-reporting-db?driver=ODBC+Driver+17+for+SQL+Server'
+usernameDest = 'username'
+pwdDest = 'password'
+dsnDest = 'connectionstring'
 
 engineDest = sqlalchemy.create_engine("mssql+pyodbc://{0}:{1}@{2}".format(usernameDest,pwdDest,dsnDest),\
                                   isolation_level='READ COMMITTED', echo = True)
@@ -152,12 +152,4 @@ FinalData.rename(columns={"Id":"ElasticSearchDbId","timestamp":"TimeStamp"},inpl
 FinalData['TimeStamp']= pd.to_datetime(FinalData['TimeStamp'],format ='%Y-%m-%dT%H:%M:%S.%f%z')
 FinalData.to_sql('PentlandData',con=engineDest,if_exists='append',index=False)
 
-##Option 2 : export data to csv and then bulk insert using bulk copy utility( bcp)
 
-##    Script to be run in cmd or PS ( requires bcp to be installed) :
-# bcp [zz-live-reporting-db].dbo.[PentlandData]  IN F:\PentlandSolution\PentlandDataNewforUpload.csv  -f F:\BULK_Insert_FOrmat_File_pentlandDataNew.fmt -S zz-live-wh-server.database.windows.net -U <Dbuser> -P <PW>
-
-##  Export the data to csv
- ## C|ut the datetime column to length of 23 characters
-FinalData['TimeStamp'] = FinalData['TimeStamp'].dt.strftime("%Y-%m-%d %H:%M:%S.%f").str.slice(start=0,stop=23)
-FinalData.to_csv('PentlandDataNewforUpload.csv',sep=';',index=False,header=False,chunksize=10000)
