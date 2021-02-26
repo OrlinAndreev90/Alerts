@@ -43,7 +43,7 @@ def get_failed_runs( table :str,schema:str) ->pd.DataFrame:
      
 
     datetime_watermark_query = sql.select([func.max(sent_mails_table.c.WatermarkDate)]).select_from(sent_mails_table)
-    datetime_watermark = engine_dest.execute(datetime_watermark_query).fetchone()[0]
+    datetime_watermark = engine_dest.execute(datetime_watermark_query).fetchone()[0].strftime('%Y-%m-%d %H:%M%S.%f')[:-3]
         #In case there are no  watermarks in the Watermarks table
     if datetime_watermark is None:
         # Dont Filter on watermark
